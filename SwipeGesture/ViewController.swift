@@ -9,12 +9,54 @@
 import UIKit
 
 class ViewController: UIViewController {
-
+    
+    @IBOutlet private weak var imageView: UIImageView!
+    
+    let image = ["English", "Polish", "Spanish"]
+    var index = 0
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
+        setDefaulImage()
+        setupSwipeGesture()
     }
-
-
+    
+    private func setDefaulImage() {
+        imageView.image = UIImage(named: image[index])
+    }
+    
+    private func setupSwipeGesture() {
+        let rightSwipeGesture = UISwipeGestureRecognizer(target: self, action: #selector(swipe))
+        rightSwipeGesture.direction = .right
+        
+        let leftSwipeGesture = UISwipeGestureRecognizer(target: self, action: #selector(swipe))
+        leftSwipeGesture.direction = .left
+    
+        view.addGestureRecognizer(rightSwipeGesture)
+        view.addGestureRecognizer(leftSwipeGesture)
+    }
+    
+    @objc func swipe(sender: UISwipeGestureRecognizer) {
+        if sender.state == .ended {
+            switch sender.direction {
+            case .right:
+                index += 1
+                if index == image.count {
+                    index = image.count - 1
+                }
+            case .left:
+                index -= 1
+                if index == -1 {
+                    index = 0
+                }
+            default:
+                break
+            }
+            
+            
+            
+            imageView.image = UIImage(named: image[index])
+        }
+    }
 }
 
